@@ -35,13 +35,11 @@ const mutex = new Mutex();
 const IsSSLMode = true;
 
 if (IsSSLMode == true) {
-  /*
   var options = {
     key: fs.readFileSync(path.join(__dirname, "private.key")),
     cert: fs.readFileSync(path.join(__dirname, "certificate.crt"))
   };
-  */
-  var server = https.createServer(app).listen(8080, () => {
+  var server = https.createServer(app, options).listen(8080, () => {
     console.log("Express server listening on port :");
   });
 }
@@ -61,7 +59,7 @@ else {
     let filePath = path.join(__dirname, "8DD151889C72C63D1B41AFB7CCCA82C9.txt");
     res.download(filePath);
   })
- 
+
 }
 
 app.get('/', function (req, res) {
@@ -302,7 +300,7 @@ async function SendAmetaFromMe(toAddress, amount) {
   try {
     let nonce = await provider.getTransactionCount(process.env.WALLET_ADDRESS);
     nonceOffset = nonceOffset + 1;
-    console.log("SendAmetaFromMe Nonce:", nonce , nonceOffset);
+    console.log("SendAmetaFromMe Nonce:", nonce, nonceOffset);
     const tx = await TokenContract.transfer(toAddress, amount, {
       nonce: nonce + nonceOffset,
       value: 0,
@@ -315,7 +313,7 @@ async function SendAmetaFromMe(toAddress, amount) {
       console.log("Ether_utiles transferToken reduce nonce = ", nonceOffset);
       nonceOffset = nonceOffset - 1;
     }
-    
+
     return tx;
   } catch (error) {
     if (nonceOffset > -1) {
